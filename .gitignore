@@ -125,5 +125,6 @@ var/
 # Serverless directories
 
 .serverless/
-node-modules/
+node_modules/
+ta-lib/
 .DS_Store
