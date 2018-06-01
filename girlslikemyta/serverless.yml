@@ -74,6 +74,13 @@ functions:
      - http:
          path: test_ta_lib
          method: get
+  calcBollingerBands:
+    handler: handler.calcBollingerBands
+    events:
+     - http:
+         path: calcBollingerBands
+         method: get
+
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
@@ -132,3 +139,10 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux
