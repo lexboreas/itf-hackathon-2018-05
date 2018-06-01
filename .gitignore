@@ -123,6 +123,7 @@ var/
 *.egg
 
 # Serverless directories
-.serverless
 
+.serverless/
+node-modules/
 .DS_Store
