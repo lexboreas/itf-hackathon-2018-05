@@ -11,7 +11,7 @@
 #
 # Happy Coding!
 
-service: my-test-py3
+service: my-test-go
 
 # You can pin your service to only deploy with a specific Serverless version
 # Check out our docs for more details
@@ -19,28 +19,15 @@ service: my-test-py3
 
 provider:
   name: aws
-  runtime: python3.6
-  stage: dev
-  region: us-east-1
+  runtime: go1.x
 
-  environment:
-    DYNAMODB_INDICATORS_TABLE: ${self:service}-${self:provider.stage}-indicators
-
-
+# you can overwrite defaults here
+#  stage: dev
+#  region: us-east-1
 
 # you can add statements to the Lambda function's IAM Role here
-  iamRoleStatements:
-    - Effect: "Allow"
-      Action:
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_INDICATORS_TABLE}"
-
-
+#  iamRoleStatements:
+#    - Effect: "Allow"
 #      Action:
 #        - "s3:ListBucket"
 #      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
@@ -58,43 +45,29 @@ provider:
 #  environment:
 #    variable1: value1
 
-# you can add packaging information here
-#package:
-#  include:
-#    - include-me.py
-#    - include-me-dir/**
-#  exclude:
-#    - exclude-me.py
-#    - exclude-me-dir/**
+package:
+ exclude:
+   - ./**
+ include:
+   - ./bin/**
 
 functions:
-  # hello:
-  #   handler: handler.hello
-  #   events:
-  #     - sns: arn:aws:sns:us-east-1:983584755688:itt-sns-data-core-stage
-  test_redis:
-    handler: test_redis.test_redis
-    events:
-     - http:
-         path: test_redis
-         method: get
-  test_dynamodb:
-    handler: test_dynamodb.test_dynamodb
-    events:
-     - http:
-         path: test_dynamodb
-         method: get
+  hello:
+    handler: bin/hello
+  world:
+    handler: bin/world
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
-    # events:
+# events:
+#    events:
 #      - http:
 #          path: users/create
 #          method: get
 #      - s3: ${env:BUCKET}
 #      - schedule: rate(10 minutes)
-     # - sns: arn:aws:sns:us-east-1:983584755688:itt-sns-data-core-stage
+#      - sns: greeter-topic
 #      - stream: arn:aws:dynamodb:region:XXXXXX:table/foo/stream/1970-01-01T00:00:00.000
 #      - alexaSkill: amzn1.ask.skill.xx-xx-xx-xx
 #      - alexaSmartHome: amzn1.ask.skill.xx-xx-xx-xx
@@ -114,6 +87,9 @@ functions:
 #          pool: MyUserPool
 #          trigger: PreSignUp
 
+#    Define function environment variables here
+#    environment:
+#      variable2: value2
 
 # you can add CloudFormation resource templates here
 #resources:
@@ -126,19 +102,3 @@ functions:
 #     NewOutput:
 #       Description: "Description for the output"
 #       Value: "Some output value"
-
-resources:
-  Resources:
-    indicatorsTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: ${self:provider.environment.DYNAMODB_INDICATORS_TABLE}
-        AttributeDefinitions:
-          - AttributeName: primary_key
-            AttributeType: S
-        KeySchema:
-          - AttributeName: primary_key
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
