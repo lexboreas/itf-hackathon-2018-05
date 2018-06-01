@@ -68,18 +68,25 @@ provider:
 #    - exclude-me-dir/**
 
 functions:
+  test_dynamodb:
+    handler: handler.test_dynamodb
+    events:
+      - http:
+        path: test_dynamodb
+        method: get
   test_ta_lib:
     handler: handler.test_ta_lib
     events:
-     - http:
-         path: test_ta_lib
-         method: get
+      - http:
+        path: test_ta_lib
+        method: get
   calcBollingerBands:
     handler: handler.calcBollingerBands
     events:
-     - http:
-         path: calcBollingerBands
-         method: get
+      - sns: arn:aws:sns:us-east-1:983584755688:itt-sns-data-core-stage
+      - http:
+        path: calcBollingerBands
+          method: get
 
 
 #    The following are a few example events you can configure
@@ -145,4 +152,5 @@ plugins:
 
 custom:
   pythonRequirements:
-    dockerizePip: non-linux
+    dockerizePip: true
+    usePipenv: true

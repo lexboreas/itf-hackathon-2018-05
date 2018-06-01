@@ -127,4 +127,5 @@ var/
 .serverless/
 node_modules/
 ta-lib/
+*.tar.gz
 .DS_Store
