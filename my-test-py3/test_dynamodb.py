@@ -24,7 +24,9 @@ def test_dynamodb(event, context):
         )
         message = "pretty sure we saved in the db"
 
-    body = {"message": message}
+    body = {"message": message,
+            "db_response": json.dumps(db_response)
+            }
 
     response = {
         "statusCode": 200,
