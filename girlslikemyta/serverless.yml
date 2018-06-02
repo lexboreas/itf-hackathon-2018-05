@@ -68,24 +68,27 @@ provider:
 #    - exclude-me-dir/**
 
 functions:
+  test_sns:
+    handler: handler.test_sns
+    events:
+      - sns: arn:aws:sns:us-east-1:983584755688:itt-sns-data-core-stage
   test_dynamodb:
     handler: handler.test_dynamodb
     events:
       - http:
-        path: test_dynamodb
-        method: get
+          path: test_dynamodb
+          method: get
   test_ta_lib:
     handler: handler.test_ta_lib
     events:
       - http:
-        path: test_ta_lib
-        method: get
+          path: test_ta_lib
+          method: get
   calcBollingerBands:
     handler: handler.calcBollingerBands
     events:
-      - sns: arn:aws:sns:us-east-1:983584755688:itt-sns-data-core-stage
       - http:
-        path: calcBollingerBands
+          path: calcBollingerBands
           method: get
 
 
